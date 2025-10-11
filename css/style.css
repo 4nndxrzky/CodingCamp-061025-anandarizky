@@ -1,111 +1,71 @@
-/* File: css/style.css */
-
-/* -------------------------------------- */
-/* Styling Kustom Sesuai Permintaan */
-/* -------------------------------------- */
-
 * {
-  /* Properti Scrollbar Manual */
   scrollbar-width: none;
 }
-/* Untuk browser berbasis Webkit (Chrome, Safari) */
+
 *::-webkit-scrollbar {
   display: none;
 }
 
 .logo-icon {
-  /* Menggunakan kelas Tailwind (w-12 h-12 rounded-full) untuk ukuran dan bentuk, 
-       tapi menambahkan properti background kustom di sini. */
   background-color: grey;
   background-image: url("../img/anndxrzky.png");
   background-size: cover;
   background-position: center;
-  /* Memberikan efek transisi agar lebih halus */
+
   transition: transform 0.3s;
 }
 .logo-icon:hover {
   transform: scale(1.1);
 }
 
-/* -------------------------------------- */
-/* Penyesuaian Layout & Tipografi (Opsional, jika Tailwind tidak cukup) */
-/* -------------------------------------- */
-
-/* Mengatasi properti global yang mungkin bertentangan (disarankan menggunakan Tailwind utilities)
-   Jika Anda ingin menggunakan kelas .container kustom: 
-*/
-
-/* Catatan: Properti seperti .main-header (display: flex; justify-content: space-between;) 
-   telah digantikan oleh kelas Tailwind: 
-   .main-header { display: flex; justify-content: space-between; } 
-   => class="flex justify-between items-center" di HTML.
-*/
-
-/* File: css/style.css (Tambahkan kode ini untuk animasi slider) */
-
 .modern-photo-frame {
-  /* Bayangan berlapis untuk efek kedalaman (Deep Shadow) */
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    /* Bayangan Utama (shadow-2xl) */ 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    /* Bayangan Tambahan */ 0 0 0 8px rgba(255, 255, 255, 0.5); /* Border Putih Transparan (Internal Frame) */
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 8px rgba(255, 255, 255, 0.5);
 
-  /* Tambahan: Efek sedikit 'lift' saat hover */
   transition: transform 0.5s ease-in-out;
 }
 
-/* .modern-photo-frame:hover dihapus karena kosong dan sudah digantikan oleh Tailwind di HTML */
-
-/* -------------------------------------- */
-/* SLIDER / ANIMASI PESAN */
-/* -------------------------------------- */
-
 .message-card {
-  /* Properti dasar positioning tetap sama untuk slider */
   position: absolute;
-  top: 65px; /* Sesuaikan dengan tinggi header Umpan Balik */
+  top: 65px;
   left: 15px;
   right: 15px;
 
-  /* Styling Visual Card */
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
-  padding: 20px; /* Padding lebih besar agar terasa lega */
+  padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Shadow yang lembut */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   font-size: 0.95rem;
   line-height: 1.4;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
 
-/* Jarak Judul Waktu */
 .message-card-timestamp {
   font-weight: bold;
   color: #444;
-  /* Menggunakan margin-bottom yang jelas untuk memisahkan dari konten */
+
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #eeeeee; /* Border tipis pemisah */
+  border-bottom: 1px solid #eeeeee;
   display: block;
-  font-size: 1rem; /* Ukuran font yang pas */
+  font-size: 1rem;
   line-height: 1.3;
-  white-space: pre-wrap; /* Memastikan baris waktu tidak terpotong */
+  white-space: pre-wrap;
 }
 
-/* Perbaikan Jarak pada Tag P di dalam Card */
 .message-card p {
-  /* Mengurangi margin agar baris data lebih rapat */
   margin: 6px 0;
   color: #333;
-  /* Membuat jarak antara Nama dan isinya menjadi lebih jelas */
+
   display: flex;
   font-weight: 500;
 }
 
 .message-card p strong {
-  /* Pastikan label (Nama, Tanggal Lahir) tebal */
   font-weight: 700;
-  min-width: 120px; /* Memberi ruang tetap untuk label */
+  min-width: 120px;
   display: inline-block;
-  color: #1f2937; /* Warna label lebih gelap */
+  color: #1f2937;
 }

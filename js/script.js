@@ -1,37 +1,36 @@
-// File: js/script.js
-
-// --- KONSTANTA GLOBAL ---
 const STORAGE_KEY = "rizky_portfolio_messages";
 const SLIDER_INTERVAL_MS = 6000;
 let currentMessageIndex = 0;
 let messageSliderInterval;
 let messages = [];
 
-// ----------------------------------------------------
-// FUNGSI UTILITAS: Title Case
-// ----------------------------------------------------
-
-/**
- * Mengubah string menjadi format Title Case (Huruf pertama setiap kata kapital).
- */
 function toTitleCase(str) {
   if (!str) return "";
   return str
     .toLowerCase()
     .split(" ")
     .map(function (word) {
-      return word.charAt(0).toUpperCase() + word.slice(1);
+      return word.length > 0
+        ? word.charAt(0).toUpperCase() + word.slice(1)
+        : "";
     })
     .join(" ");
 }
 
-// ----------------------------------------------------
-// I. WELCOME SPEECH & USER NAME HANDLERS (Pop-up Selalu Aktif)
-// ----------------------------------------------------
+function adjustHeadingSize(h1Element, userName) {
+  const defaultClasses = ["text-6xl", "md:text-7xl"];
+  const smallClasses = ["text-4xl", "md:text-5xl"];
+  const maxLength = 10;
 
-/**
- * Meminta nama pengguna menggunakan SweetAlert2 dan menerapkan Title Case.
- */
+  h1Element.classList.remove(...defaultClasses, ...smallClasses);
+
+  if (userName.length > maxLength) {
+    h1Element.classList.add(...smallClasses);
+  } else {
+    h1Element.classList.add(...defaultClasses);
+  }
+}
+
 function getNewUserName() {
   return Swal.fire({
     title: "Selamat Datang! 👋",
@@ -53,30 +52,19 @@ function getNewUserName() {
   });
 }
 
-/**
- * Mengatur ucapan selamat datang. Pesan dibagi menjadi tag H1 dan P.
- */
 async function setWelcomeSpeech() {
-  // 1. Dapatkan nama pengguna (sudah Title Case)
   const userName = await getNewUserName();
 
-  // 2. Tentukan konten untuk setiap elemen
-  // Konten untuk H1 (Sapaan waktu dihapus)
   const h1Content = `Hi, ${userName}!`;
 
-  // 3. Update elemen di HTML
   const h1Element = document.getElementById("greeting-name-h1");
-  // Karena elemen p tidak diisi oleh JS lagi, kode untuk pElement dihilangkan.
 
   if (h1Element) {
-    // Konten H1
     h1Element.textContent = h1Content;
+
+    adjustHeadingSize(h1Element, userName);
   }
 }
-
-// ----------------------------------------------------
-// II. LOCAL STORAGE & MESSAGE SLIDER HANDLERS
-// ----------------------------------------------------
 
 function loadMessages() {
   const messagesJson = localStorage.getItem(STORAGE_KEY);
@@ -97,12 +85,12 @@ function saveMessages(newMessages) {
   messages = newMessages;
 }
 
-// Fungsi untuk membuat elemen card pesan
 function createMessageCard(msg) {
   const card = document.createElement("div");
   card.className = "message-card";
 
   const date = new Date(msg.timestamp);
+
   const options = {
     weekday: "short",
     month: "short",
@@ -115,13 +103,15 @@ function createMessageCard(msg) {
     timeZone: "Asia/Jakarta",
   };
 
-  const formattedTime = date.toLocaleString("en-US", options);
-  const finalTimeString = formattedTime
-    .replace("GMT+7", "Western Indonesia Time")
-    .replace(/, GMT\+\d+/, "");
+  const formattedTime = date.toLocaleString("id-ID", options);
+
+  const finalTimeString = formattedTime.replace(
+    /(\s\d{2}:\d{2}:\d{2})$/,
+    "$1 WIB"
+  );
 
   card.innerHTML = `
-        <span class="message-card-timestamp">Current time : ${finalTimeString}</span>
+        <span class="message-card-timestamp">Waktu saat ini : ${finalTimeString}</span>
         <p><strong>Nama</strong> : ${toTitleCase(msg.name)}</p>
         <p><strong>Tanggal Lahir</strong> : ${msg.birthdate}</p>
         <p><strong>Jenis Kelamin</strong> : ${msg.gender}</p>
@@ -130,7 +120,6 @@ function createMessageCard(msg) {
   return card;
 }
 
-// Fungsi untuk menampilkan slide tertentu
 function showSlide(index) {
   const container = document.getElementById("message-slider-container");
   if (!container || messages.length === 0) {
@@ -176,7 +165,6 @@ function showSlide(index) {
   });
 }
 
-// Fungsi untuk memulai interval slider
 function startMessageSlider() {
   loadMessages();
 
@@ -197,10 +185,6 @@ function startMessageSlider() {
     }
   }
 }
-
-// ----------------------------------------------------
-// III. FORM SUBMISSION & VALIDATION
-// ----------------------------------------------------
 
 function validateForm(event) {
   event.preventDefault();
@@ -251,16 +235,12 @@ function validateForm(event) {
   });
 
   form.reset();
+
   birthdateInput.value = "2000-01-01";
 
   return true;
 }
 
-// ----------------------------------------------------
-// IV. INISIALISASI & BURGER MENU SETUP (PERUBAHAN DI SINI)
-// ----------------------------------------------------
-
-// Fungsi Kontrol Menu Burger (TAMBAHAN BARU)
 function setupBurgerMenu() {
   const burgerButton = document.getElementById("burger-button");
   const mobileMenu = document.getElementById("mobile-menu");
@@ -271,16 +251,14 @@ function setupBurgerMenu() {
     const isOpen = mobileMenu.classList.contains("translate-x-0");
 
     if (isOpen) {
-      // TUTUP MENU
       mobileMenu.classList.remove("translate-x-0");
       mobileMenu.classList.add("translate-x-full");
       menuOverlay.classList.remove("opacity-50");
-      // Sembunyikan setelah transisi selesai
+
       setTimeout(() => menuOverlay.classList.add("hidden"), 300);
     } else {
-      // BUKA MENU
       menuOverlay.classList.remove("hidden");
-      // Beri sedikit waktu untuk opacity berubah setelah display diaktifkan
+
       setTimeout(() => menuOverlay.classList.add("opacity-50"), 10);
       mobileMenu.classList.remove("translate-x-full");
       mobileMenu.classList.add("translate-x-0");
@@ -294,20 +272,16 @@ function setupBurgerMenu() {
     menuOverlay.addEventListener("click", toggleMenu);
   }
 
-  // Tutup menu saat link diklik
   menuLinks.forEach((link) => {
     link.addEventListener("click", toggleMenu);
   });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 1. Setup Burger Menu (PANGGILAN BARU)
   setupBurgerMenu();
 
-  // 2. SweetAlert2 akan muncul di sini.
   await setWelcomeSpeech();
 
-  // 3. Start Slider
   startMessageSlider();
 
   const contactForm = document.getElementById("contact-form");
